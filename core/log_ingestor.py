@@ -32,12 +32,13 @@ def read_text_log(filepath: str, log_type: str):
     with open(filepath, "r", encoding="utf-8") as file: 
 
         # Appends every line to a separate dictionary, which is then appended to the list
-        for line in file:
+        for line_number, line in enumerate(file, start=1):
             line = line.strip() # Removes whitespace
             if line: # Empty lines are skipped
                 data.append({
                     "source_file": os.path.basename(filepath),
                     "log_type": log_type,
+                    "line": line_number,
                     "raw_entry": line # Each log entry is stored in a dictionary
                 })
 
@@ -56,11 +57,12 @@ def read_json_log(filepath: str):
     with open(filepath, "r", encoding="utf-8") as file:
 
         # Appends every line to a separate dictionary, which is then appended to the list
-        for line in file:
+        for line_number, line in enumerate(file, start=1):
             log_object = json.loads(line) # Converts JSON string to dictionary
             data.append({
                 "source_file": os.path.basename(filepath),
                 "log_type": "application",
+                "line": line_number,
                 "raw_entry": log_object # Each log entry is stored in a dictionary
             })
     # List of ingested log entries is returned

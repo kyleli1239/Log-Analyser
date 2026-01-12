@@ -1,0 +1,31 @@
+# Config file
+
+# Repeated login attempts rule
+# Detect login attempts from the same source
+repeated_login:
+  max_attempts: 5
+  time_window: 60
+
+# Blacklist IP rule
+# List of IPs that are flagged
+blacklisted_ip:
+  - "192.168.1.232"
+  - "172.16.0.52"
+
+# Out of business hours rule
+# Detect activity that happens outside business hours
+business_hours:
+  start: "08:00"
+  end: "17:00"
+
+# XSS rule
+# Detect common XSS phrases
+xss:
+  patterns:
+    - "<script>alert('xss')</script>!"
+
+# SQL injection rule
+# Detect common SQL injection phrases
+sql_injection:
+  patterns:
+    - "OR '1'='1"

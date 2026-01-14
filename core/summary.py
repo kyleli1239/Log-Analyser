@@ -106,13 +106,14 @@ def create_summary_file(alerts, config):
                 # If the alert's rule is repeated login, extract the entity (IP/user)
                 if alert ["rule"] == "repeated_login":
                     entity = alert["details"]["entity"]
-                    repeated_logins[entity]
+                    attempts = alert["details"]["attempts"]
+                    repeated_logins [entity] = attempts
 
             # If there is a repeated login, write into file
             if repeated_logins:
                 f.write("Repeated failed login attempts\n")
                 for entity, count in repeated_logins.items(): # Count is number of repeat logins from entity
-                    f.write(f"{entity}:{count}\n")
+                    f.write(f"{entity}: {count}\n")
             
             else:
                 f.write("No repeated failed login attempts\n")

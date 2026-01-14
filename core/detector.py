@@ -1,6 +1,7 @@
 import yaml
 from collections import defaultdict, deque
 from datetime import datetime, timedelta
+import json
 
 def create_alert(rule, entry, details=None):
     """
@@ -80,7 +81,19 @@ def detect_xss(entries, config):
 
     # Iterates through every log entry
     for entry in entries:
-        raw = str(entry["raw"]) # Extracts the raw log line and converts to string (might be a JSON dictionary)
+
+        # Checks to see whether data inside the field "raw" is a dictionary (for JSON files)
+        # If it's a dictionary, use get() to extract data from the field "details"
+        if isinstance(entry["raw"], dict):
+            raw = str(entry["raw"])
+            details = entry.get("details","")
+
+            # If details contain a field called "payload", extract its data (payload contains XSS attempts)
+            if "payload" in details:
+                raw = details["payload"]
+                
+        else:    
+            raw = str(entry["raw"]) # Extracts the raw log line (for text-based files)
 
         # If log entry contains a XSS pattern, create an alert and append to list
         for pattern in patterns:
@@ -100,7 +113,19 @@ def detect_sql_injection(entries, config):
 
     # Iterates through every log entry
     for entry in entries:
-        raw = str(entry["raw"]) # Extracts the raw log line and converts to string (might be a JSON dictionary)
+
+        # Checks to see whether data inside the field "raw" is a dictionary (for JSON files)
+        # If it's a dictionary, use get() to extract data from the field "details"
+        if isinstance(entry["raw"], dict):
+            raw = str(entry["raw"])
+            details = entry.get("details","")
+
+            # If details contain a field called "payload", extract its data (payload contains XSS attempts)
+            if "payload" in details:
+                raw = details["payload"]
+            
+        else:    
+            raw = str(entry["raw"]) # Extracts the raw log line (for text-based files)
 
         # If log entry contains a SQL injection pattern, create an alert and append to list
         for pattern in patterns:
@@ -157,7 +182,7 @@ def detect_repeated_login(entries, config):
             while dq and dq [0] < cutoff:
                 dq.popleft()
 
-            if len(dq) == max_attempts:
+            if len(dq) >= max_attempts:
                 alerts.append(create_alert("repeated_login", entry, details = {"entity":ip,
                                                                                "attempts":len(dq),
                                                                                "window_seconds": window_seconds}))
@@ -173,7 +198,7 @@ def detect_repeated_login(entries, config):
             while dq and dq [0] < cutoff:
                 dq.popleft()
 
-            if len(dq) == max_attempts:
+            if len(dq) >= max_attempts:
                 alerts.append(create_alert("repeated_login", entry, details = {"entity":user,
                                                                                "attempts":len(dq),
                                                                                "window_seconds": window_seconds}))

@@ -68,10 +68,10 @@ def extract_text_user(text: str):
     # Patterns are ordered from most specific to most generic
     # Otherwise regex "for username" and "for invalid user username" will overlapse
     patterns = [
-        r"invalid user\s+([a-zA-Z0-9._-])", # e.g for invalid user username
-        r"user=([a-zA-Z0-9._-])", # e.g user=username
-        r"user\s+([a-zA-Z0-9._-])", # e.g user username
-        r"for\s+([a-zA-Z0-9._-])" # e.g for username
+        r"invalid user\s+([a-zA-Z0-9._-]+)", # e.g for invalid user username
+        r"user=([a-zA-Z0-9._-]+)", # e.g user=username
+        r"user\s+([a-zA-Z0-9._-]+)", # e.g user username
+        r"for\s+([a-zA-Z0-9._-]+)" # e.g for username
         ]
     
     # Loop tries each regex pattern in order on the text (case insensitive)

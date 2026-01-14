@@ -3,8 +3,8 @@
 # Repeated login attempts rule
 # Detect login attempts from the same source
 repeated_login:
-  max_attempts: 5
-  time_window: 60
+  max_attempts: 15
+  time_window: 100
 
 # Blacklist IP rule
 # List of IPs that are flagged
@@ -15,14 +15,14 @@ blacklisted_ip:
 # Out of business hours rule
 # Detect activity that happens outside business hours
 business_hours:
-  start: "08:00"
-  end: "17:00"
+  start: "4:00"
+  end: "21:00"
 
 # XSS rule
 # Detect common XSS phrases
 xss:
   patterns:
-    - "<script>alert('xss')</script>!"
+    - "<script>alert('xss')</script>"
 
 # SQL injection rule
 # Detect common SQL injection phrases

@@ -126,6 +126,7 @@ def detect_repeated_login(entries, config):
     ip_window = defaultdict(lambda: deque())
     user_window = defaultdict(lambda: deque())
 
+
     # Iterates through every log entry
     for entry in entries:
         ip = entry["ip"] # Retrieve IP from log entry
@@ -157,10 +158,9 @@ def detect_repeated_login(entries, config):
                 dq.popleft()
 
             if len(dq) == max_attempts:
-                alerts.append({"rule":"repeated_login",
-                              "entity":ip,
-                              "attempts":len(dq),
-                              "window_seconds": window_seconds})
+                alerts.append(create_alert("repeated_login", entry, details = {"entity":ip,
+                                                                               "attempts":len(dq),
+                                                                               "window_seconds": window_seconds}))
         # ------------------------------------------------
         # Track repeated failures by user
         if user is not None:
@@ -174,11 +174,9 @@ def detect_repeated_login(entries, config):
                 dq.popleft()
 
             if len(dq) == max_attempts:
-                alerts.append({"rule":"repeated_login",
-                              "entity":user,
-                              "attempts":len(dq),
-                              "window_seconds": window_seconds})
-
+                alerts.append(create_alert("repeated_login", entry, details = {"entity":user,
+                                                                               "attempts":len(dq),
+                                                                               "window_seconds": window_seconds}))
     return alerts
 
 def run_all_detections(entries, config):

@@ -1,7 +1,9 @@
 from core.log_ingestor import ingest
 from core.normaliser import normalise_all
 from core.detector import run_all_detections
+from core.summary import create_summary_file
 import yaml
+import pprint
 
 def load_config(path="config/config.yaml"):
     """
@@ -33,6 +35,13 @@ def main():
 
     # Prints the total number of alerts flagged
     print(f"Total alerts: {len(alerts)}")
+
+    filepath = create_summary_file(alerts, config)
+
+    print("Anomaly summary file created at", filepath)
+    
+    #for alert in alerts[:100]:
+        #pprint.pprint(alert)
 
 if __name__ == "__main__":
     # Runs main function when main.py is directly ran

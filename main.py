@@ -3,7 +3,6 @@ from core.normaliser import normalise_all
 from core.detector import run_all_detections
 from core.summary import create_summary_file
 import yaml
-import pprint
 
 def load_config(path="config/config.yaml"):
     """

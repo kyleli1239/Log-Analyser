@@ -2,6 +2,7 @@
 
 # Repeated login attempts rule
 # Detect login attempts from the same source
+# Time window is in seconds
 repeated_login:
   max_attempts: 15
   time_window: 100
